@@ -18,13 +18,34 @@ public class UserMapper {
 
     public static UserResponse toResponseFromJwt(UserJwt infraEntity) {
         if (infraEntity == null) return null;
-        // Nota: Assumindo que UserServiceJwt terá métodos similares ou será mapeado conforme evolução
-        // Como UserServiceJwt está vazio no momento, deixarei a estrutura pronta para quando os campos forem adicionados
         return new UserResponse(
-            null, // Implementar conforme campos de UserServiceJwt
-            null,
-            null,
-            null
+            infraEntity.getId(),
+            infraEntity.getNome(),
+            infraEntity.getEmail(),
+            infraEntity.getTipo() != null ? infraEntity.getTipo().name() : null
         );
+    }
+
+    public static User toDomain(UserJwt entity) {
+        if (entity == null) return null;
+        return new User(
+            entity.getId(),
+            entity.getNome(),
+            entity.getEmail(),
+            entity.getSenha(),
+            entity.getTipo()
+        );
+    }
+
+    public static UserJwt toJpaEntity(User domain) {
+        if (domain == null) return null;
+        UserJwt entity = new UserJwt(
+            domain.getNome(),
+            domain.getEmail(),
+            domain.getSenha(),
+            domain.getTipo()
+        );
+        entity.setId(domain.getId());
+        return entity;
     }
 }
